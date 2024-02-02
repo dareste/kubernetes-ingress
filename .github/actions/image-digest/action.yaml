@@ -1,0 +1,32 @@
+name: "Get Container Image Digests"
+description: "GitHub Action to get the digests of a provided image"
+
+inputs:
+  image:
+    description: "Image name"
+    required: true
+  insecure:
+    description: "Talk to insecure registry"
+    required: false
+    default: false
+outputs:
+  digests:
+    description: "The digests of the image"
+    value: ${{ steps.run-script.outputs.result }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: run-script
+      run: |
+        opts=""
+        if [ "${{ inputs.insecure }}" = "true" ]; then
+          opts="--insecure"
+        fi
+        output=$(${{ github.action_path }}/get_digests.sh ${{ inputs.image }} "$opts")
+        echo results=$output >>$GITHUB_OUTPUT
+      shell: bash
+
+branding:
+  icon: anchor
+  color: blue

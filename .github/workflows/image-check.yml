@@ -1,0 +1,88 @@
+name: Update Docker Images
+
+on:
+  push:
+    branches:
+      - image-diff-action
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: ${{ github.ref_name }}-update
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # build:
+  #   name: Build test image
+  #   runs-on: ubuntu-22.04
+  #   env:
+  #     DOCKER_IMAGE: localhost:5000/nginx
+  #   services:
+  #     registry:
+  #       image: registry:2
+  #       ports:
+  #         - 5000:5000
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+  #     - name: Setup QEMU
+  #       uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3 # v3.0.0
+  #       with:
+  #         platforms: arm64, amd64
+
+  #     - name: Docker Buildx
+  #       uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
+  #       with:
+  #         driver-opts: |
+  #           network=host
+
+  #     - name: Build Example Container
+  #       uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5.1.0
+  #       id: buildx
+  #       with:
+  #         file: .github/data/Dockerfile
+  #         context: "."
+  #         platforms: linux/arm64,linux/amd64
+  #         tags: ${{ env.DOCKER_IMAGE }}:latest
+  #         pull: true
+  #         push: true
+
+  #     - name: Get Digests of built image
+  #       uses: ./.github/actions/image-digest
+  #       id: new-image
+  #       with:
+  #         image: ${{ env.DOCKER_IMAGE }}:latest
+  #         insecure: true
+
+  #     - name: Get Digests of existing image
+  #       uses: ./.github/actions/image-digest
+  #       id: old-image
+  #       with:
+  #         image: nginx:1.25.3-alpine
+
+  #     - name: Echo results
+  #       run: |
+  #         echo new=${{ steps.new-image.outputs.results }} >>$GITHUB_OUTPUT
+  #         echo old=${{ steps.old-image.outputs.results }} >>$GITHUB_OUTPUT
+  #         #jq '.new-.old | .!=[]' <<<"{\"new\": ${{ steps.new-image.outputs.results }}, \"old\": ${{ steps.old-image.outputs.results }} }"
+
+  hello_world_job:
+    runs-on: ubuntu-22.04
+    name: A job to say hello
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Hello world action step
+        id: hello
+        uses: ./hello-world-javascript-action
+        with:
+          who-to-greet: 'Paul'
+      # Use the output from the `hello` step
+      - name: Get the output time
+        run: echo "The time was ${{ steps.hello.outputs.time }}"
