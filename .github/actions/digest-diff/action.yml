@@ -1,0 +1,15 @@
+name: 'Digest Diff'
+description: 'Diffs to lists of docker manifest digests'
+inputs:
+  left:
+    description: 'Left hand side of diff'
+    required: true
+  right:
+    description: 'Right hand side of diff'
+    required: true
+outputs:
+  diff:
+    description: 'Is different.  Boolean'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

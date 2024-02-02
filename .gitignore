@@ -29,7 +29,7 @@ osx-nginx-plus-ingress
 nginx-plus-ingress
 cmd/nginx-ingress/nginx-ingress
 dist/
-!.github/actions/hello-world-javascript-action/dist
+!.github/actions/*/dist
 
 # NGINX Plus license files
 *.crt
@@ -68,8 +68,8 @@ coverage.out
 node_modules
 package-lock.json
 package.json
-!.github/actions/hello-world-javascript-action/package-lock.json
-!.github/actions/hello-world-javascript-action/package.json
+!.github/actions/*/package-lock.json
+!.github/actions/*/package.json
 
 # kind kube-config
 kube-local
