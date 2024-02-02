@@ -80,7 +80,7 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Hello world action step
         id: hello
-        uses: ./hello-world-javascript-action
+        uses: ./.github/actions/hello-world-javascript-action
         with:
           who-to-greet: 'Paul'
       # Use the output from the `hello` step
