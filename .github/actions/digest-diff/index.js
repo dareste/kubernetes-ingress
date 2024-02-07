@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+import isEqual from 'lodash';
 
 try {
   // `left` input defined in action metadata file
@@ -9,20 +10,8 @@ try {
   // `right` input defined in action metadata file
   const right = core.getInput('right');
   const right_json = JSON.parse(right);
-
-  diff = true;
-  for (var i = 0; i < left_json.length; i++){
-    for (var j = 0; j < right_json.length; j++){
-        if (left_json[i].platform === right_json[j].platform) {
-            if (left_json[i].digest === right_json[j].digest) {
-            console.log(right_json[j].platform);
-            break;
-        }
-        diff = false;
-    }
-  }
   
-  core.setOutput("diff", false);
+  core.setOutput("diff", isEqual(left_json, right_json));
 
   // Get the JSON webhook payload for the event that triggered the workflow
   const payload = JSON.stringify(github.context.payload, undefined, 2)
