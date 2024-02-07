@@ -11,7 +11,9 @@ try {
   const right = core.getInput('right');
   const right_json = JSON.parse(right);
   
-  core.setOutput("diff", isEqual(left_json, right_json));
+  output = isEqual(left_json, right_json);
+  console.log(`The diff was {ouput}`);
+  core.setOutput("diff", output);
 
   // Get the JSON webhook payload for the event that triggered the workflow
   const payload = JSON.stringify(github.context.payload, undefined, 2)

@@ -83,7 +83,7 @@ jobs:
         id: diff
         uses: ./.github/actions/digest-diff
         with:
-          left: '[{"platform": "amd64", "digest": "abc123"},{"platform": "arm64", "digest": "xyz97"}]'
+          left: '[{"platform": "amd64", "digest": "abc123"},{"platform": "arm64", "digest": "xyz987"}]'
           right: '[{"platform": "amd64", "digest": "abc123"},{"platform": "arm64", "digest": "xyz987"}]'
       - name: Get the output
         run: echo "The Diff was ${{ steps.diff.outputs.diff }}"
