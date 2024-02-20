@@ -23,6 +23,11 @@ jobs:
   debian:
     name: Build Debian NGINX container image
     runs-on: ubuntu-22.04
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
     steps:
       - name: Checkout Repository
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -51,19 +56,19 @@ jobs:
         uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5.5.1
         with:
           images: |
-            name=nginx/nginx
+            name=localhost:5000/nginx/nginx
           tags: |
             type=raw,value=${{ steps.nginx-version.outputs.version }}
 
       - name: Build NGINX Container
         uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5.1.0
         with:
-          file: Dockerfile
+          file: docker-nginx/mainline/debian/Dockerfile
           context: "docker-nginx/mainline/debian"
           cache-from: type=gha,scope=nginx-debian
           cache-to: type=gha,scope=nginx-debian,mode=max
           tags: ${{ steps.meta.outputs.tags }}
           platforms: "linux/arm, linux/arm64, linux/amd64, linux/ppc64le, linux/s390x"
           pull: true
-          push: false
+          push: true
           load: false
