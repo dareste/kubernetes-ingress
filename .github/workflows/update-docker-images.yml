@@ -10,6 +10,14 @@ on:
         required: false
         default: "false"
 
+# TODO
+## add labels (here?)
+## certify ubi images (here?)
+## notify when images published (here?)
+## plus images
+## Trigger
+### Image release flow
+
 defaults:
   run:
     shell: bash
@@ -145,9 +153,11 @@ jobs:
     with:
       platforms: linux/arm,linux/arm64,linux/amd64,linux/ppc64le,linux/s390x
       image: debian
+      branch: refs/tags/v${{ needs.variables.outputs.kic-tag }}
       tag: ${{ needs.variables.outputs.kic-tag }}
       go-md5: ${{ needs.variables.outputs.go-md5 }}
       base-image-md5: ${{ needs.variables.outputs.base-image-md5 }}
+      forked-workflow: false
     permissions:
       contents: read
       actions: read
@@ -164,9 +174,11 @@ jobs:
     with:
       platforms: linux/arm,linux/arm64,linux/amd64,linux/ppc64le,linux/s390x
       image: alpine
+      branch: refs/tags/v${{ needs.variables.outputs.kic-tag }}
       tag: ${{ needs.variables.outputs.kic-tag }}
       go-md5: ${{ needs.variables.outputs.go-md5 }}
       base-image-md5: ${{ needs.variables.outputs.base-image-md5 }}
+      forked-workflow: false
     permissions:
       contents: read
       actions: read
@@ -183,9 +195,11 @@ jobs:
     with:
       platforms: linux/arm64,linux/amd64,linux/ppc64le,linux/s390x
       image: ubi
+      branch: refs/tags/v${{ needs.variables.outputs.kic-tag }}
       tag: ${{ needs.variables.outputs.kic-tag }}
       go-md5: ${{ needs.variables.outputs.go-md5 }}
       base-image-md5: ${{ needs.variables.outputs.base-image-md5 }}
+      forked-workflow: false
     permissions:
       contents: read
       actions: read
