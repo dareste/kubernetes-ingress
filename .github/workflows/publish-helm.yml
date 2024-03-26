@@ -74,8 +74,8 @@ jobs:
 
       - name: Push to OCI registries
         run: |
-          echo helm push ${{ steps.package.outputs.path }} oci://ghcr.io/nginxinc/charts
-          echo helm push ${{ steps.package.outputs.path }} oci://registry-1.docker.io/nginxcharts
+          helm push ${{ steps.package.outputs.path }} oci://ghcr.io/nginxinc/charts
+          helm push ${{ steps.package.outputs.path }} oci://registry-1.docker.io/nginxcharts
 
       - name: Checkout Repository
         uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
@@ -93,7 +93,7 @@ jobs:
           git add -A
           git -c user.name='NGINX Kubernetes Team' -c user.email='kubernetes@nginx.com' \
           commit -m "NGINX Ingress Controller - Release ${{ needs.checks.outputs.chart_version }}"
-          echo git push -u origin master
+          git push -u origin master
 
   operator:
     name: Trigger PR for Operator
