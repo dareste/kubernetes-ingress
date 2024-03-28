@@ -121,7 +121,7 @@ jobs:
           build-args: |
             BUILD_OS=${{ inputs.image }}
             IC_VERSION=${{ steps.meta.outputs.version }}
-            ${{ steps.nap_modules.outputs.modules != '' && format('NAP_MODULES={0}', steps.nap_modules.outputs.modules) || '' }}
+            ${{ inputs.nap-modules != '' && format('NAP_MODULES={0}', steps.nap_modules.outputs.name) || '' }}
           secrets: |
             "nginx-repo.crt=${{ inputs.nap-modules != '' && secrets.NGINX_AP_CRT || secrets.NGINX_CRT }}"
             "nginx-repo.key=${{ inputs.nap-modules != '' && secrets.NGINX_AP_KEY || secrets.NGINX_KEY }}"
@@ -183,7 +183,7 @@ jobs:
             BUILD_OS=${{ inputs.image }}
             ${{ ! inputs.forked-workflow && format('PREBUILT_BASE_IMG=gcr.io/f5-gcs-7899-ptg-ingrss-ctlr/dev/nginx-ic-base/plus:{0}-{1}{2}', inputs.base-image-md5, inputs.image, steps.nap_modules.outputs.name != '' && format('-{0}', steps.nap_modules.outputs.name) || '') || '' }}
             IC_VERSION=${{ steps.meta.outputs.version }}
-            ${{ inputs.nap_modules != '' && format('NAP_MODULES={0}', steps.nap_modules.outputs.modules) || '' }}
+            ${{ inputs.nap_modules != '' && format('NAP_MODULES={0}', steps.nap_modules.outputs.name) || '' }}
             ${{ (contains(inputs.target, 'aws') && inputs.nap_modules != '') && format('NAP_MODULES_AWS={0}', steps.nap_modules.outputs.modules) || '' }}
           secrets: |
             "nginx-repo.crt=${{ inputs.nap-modules != '' && secrets.NGINX_AP_CRT || secrets.NGINX_CRT }}"
