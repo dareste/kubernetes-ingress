@@ -22,6 +22,7 @@ on:
 ## goreleaser notify when release complete (#announce) (here?)
 ## binary stored in azure
 ## binary added to Github release
+## tag as tested on successful smoke tests
 ## Trigger
 ### Image release flow
 ### Operator
