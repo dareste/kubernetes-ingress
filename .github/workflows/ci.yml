@@ -46,6 +46,9 @@ jobs:
   checks:
     name: Checks and variables
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      id-token: write
     outputs:
       k8s_latest: ${{ steps.vars.outputs.k8s_latest }}
       latest_kindest_node_versions: ${{ steps.vars.outputs.latest_kindest_node_versions }}
@@ -58,6 +61,7 @@ jobs:
       build_tag: ${{ steps.vars.outputs.build_tag }}
       stable_tag: ${{ steps.vars.outputs.stable_tag }}
       forked_workflow: ${{ steps.vars.outputs.forked_workflow }}
+      stable_image_exists: ${{ steps.stable_exists.outputs.exists }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
@@ -122,6 +126,33 @@ jobs:
           cd ../.. && mkdir -p github.com/nginxinc && mv kubernetes-ingress/kubernetes-ingress github.com/nginxinc/ && cd github.com/nginxinc/kubernetes-ingress
           make update-codegen && git diff --name-only --exit-code pkg/**
           cd ../../.. && mv github.com/nginxinc/kubernetes-ingress kubernetes-ingress/kubernetes-ingress
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@55bd3a7c6e2ae7cf1877fd1ccb9d54c0503c457c # v2.1.2
+        with:
+          token_format: access_token
+          workload_identity_provider: ${{ secrets.GCR_WORKLOAD_IDENTITY }}
+          service_account: ${{ secrets.GCR_SERVICE_ACCOUNT }}
+        if: ${{ steps.vars.outputs.forked_workflow == 'false' }}
+
+      - name: Login to GCR
+        uses: docker/login-action@e92390c5fb421da1463c202d546fed0ec5c39f20 # v3.1.0
+        with:
+          registry: gcr.io
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+        if: ${{ steps.vars.outputs.forked_workflow == 'false' }}
+
+      - name: Check if stable image exists
+        id: stable_exists
+        run: |
+          if docker pull gcr.io/f5-gcs-7899-ptg-ingrss-ctlr/dev/nginx-ic/nginx-ingress:${{ steps.vars.outputs.stable_tag }}; then
+            echo "exists=0" >> $GITHUB_OUTPUT
+          else
+            echo "exists=1" >> $GITHUB_OUTPUT
+          fi
+        if: ${{ steps.vars.outputs.forked_workflow == 'false' }}
 
   unit-tests:
     name: Unit Tests
@@ -703,4 +734,4 @@ jobs:
       target_tag: ${{ needs.checks.outputs.stable_tag }}
       dry_run: false
     secrets: inherit
-    if: ${{ needs.checks.outputs.forked_workflow == 'false' && needs.smoke-results.result == 'success' }}
+    if: ${{ needs.checks.outputs.forked_workflow == 'false' && needs.smoke-results.result == 'success' && needs.checks.outputs.stable_image_exists != 0 }}
