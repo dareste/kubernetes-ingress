@@ -17,12 +17,11 @@ on:
 # TODO
 ## add labels (here?)
 ## certify ubi images (here?)
-## tag on post merge as stable
+## tag on post merge as edge
 ## notify when images published (here?)
 ## goreleaser notify when release complete (#announce) (here?)
 ## binary stored in azure
 ## binary added to Github release
-## tag as tested on successful smoke tests
 ## Trigger
 ### Image release flow
 ### Operator
@@ -30,6 +29,7 @@ on:
 ### AWS Marketplace
 ### Azure Marketplace
 ### GitHub release
+
 
 defaults:
   run:
@@ -690,3 +690,13 @@ jobs:
           else
             exit 1
           fi
+
+  tag-stable:
+    name: Tag tested image as stable
+    needs: [checks, smoke-results]
+    uses: nginxinc/k8s-dev/.github/workflows/nic-retag-images.yml@main
+    with:
+      source_tag: ${{ needs.checks.outputs.build_tag }}
+      target_tag: ${{ needs.checks.outputs.stable_tag }}
+      dry_run: true
+    if: ${{ needs.checks.outputs.forked_workflow == 'false' && needs.smoke-results.result == 'success' }}
