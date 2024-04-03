@@ -702,4 +702,5 @@ jobs:
       source_tag: ${{ needs.checks.outputs.build_tag }}
       target_tag: ${{ needs.checks.outputs.stable_tag }}
       dry_run: true
+    secrets: inherit
     if: ${{ needs.checks.outputs.forked_workflow == 'false' && needs.smoke-results.result == 'success' }}
