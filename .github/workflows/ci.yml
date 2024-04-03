@@ -694,7 +694,10 @@ jobs:
   tag-stable:
     name: Tag tested image as stable
     needs: [checks, smoke-results]
-    uses: nginxinc/k8s-dev/.github/workflows/nic-retag-images.yml@main
+    permissions:
+      contents: read # To checkout repository
+      id-token: write # To sign into Google Container Registry
+    uses: ./.github/workflows/retag-images.yml
     with:
       source_tag: ${{ needs.checks.outputs.build_tag }}
       target_tag: ${{ needs.checks.outputs.stable_tag }}
