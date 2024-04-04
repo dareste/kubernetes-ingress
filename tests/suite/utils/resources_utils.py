@@ -1504,7 +1504,7 @@ def get_events_for_object(v1: CoreV1Api, namespace, object_name) -> []:
     """
     print(f"Get the events for {object_name} in the namespace: {namespace}")
     events = v1.list_namespaced_event(namespace)
-    return [event for event in events.items() if event.involved_object.name == object_name]
+    return [event for event in events.items if event.involved_object.name == object_name]
 
 
 def get_events(v1: CoreV1Api, namespace) -> []:
