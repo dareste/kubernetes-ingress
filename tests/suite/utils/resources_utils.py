@@ -1218,7 +1218,7 @@ def delete_ingress_controller(apps_v1_api: AppsV1Api, name, dep_type, namespace)
 
 
 def create_dos_arbitrator(
-        v1: CoreV1Api, apps_v1_api: AppsV1Api, namespace, deployment_yaml_manifest, svc_yaml_manifest
+    v1: CoreV1Api, apps_v1_api: AppsV1Api, namespace, deployment_yaml_manifest, svc_yaml_manifest
 ) -> str:
     """
     Create dos arbitrator according to the params.
@@ -1321,7 +1321,7 @@ def create_items_from_yaml(kube_apis, yaml_manifest, namespace) -> {}:
 
 
 def create_ingress_with_ap_annotations(
-        kube_apis, yaml_manifest, namespace, policy_name, ap_pol_st, ap_log_st, syslog_ep
+    kube_apis, yaml_manifest, namespace, policy_name, ap_pol_st, ap_log_st, syslog_ep
 ) -> None:
     """
     Create an ingress with AppProtect annotations
@@ -1372,7 +1372,7 @@ def create_ingress_with_dos_annotations(kube_apis, yaml_manifest, namespace, dos
 
 
 def replace_ingress_with_ap_annotations(
-        kube_apis, yaml_manifest, name, namespace, policy_name, ap_pol_st, ap_log_st, syslog_ep
+    kube_apis, yaml_manifest, name, namespace, policy_name, ap_pol_st, ap_log_st, syslog_ep
 ) -> None:
     """
     Replace an ingress with AppProtect annotations
