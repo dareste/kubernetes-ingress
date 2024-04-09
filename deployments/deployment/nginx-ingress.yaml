@@ -33,7 +33,7 @@ spec:
 #      - name: nginx-log
 #        emptyDir: {}
       containers:
-      - image: nginx/nginx-ingress:3.4.3
+      - image: localhost:32000/unstripped-nginx-ingress:areste-pprof
         imagePullPolicy: IfNotPresent
         name: nginx-ingress
         ports:
