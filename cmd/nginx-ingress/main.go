@@ -38,6 +38,8 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
+
+	_ "etc/http/pprof"
 )
 
 // Injected during build
@@ -54,6 +56,11 @@ const (
 )
 
 func main() {
+
+	go func() {
+		http.ListenAndServe("0.0.0.0:5000", nil)
+	}()
+	
 	commitHash, commitTime, dirtyBuild := getBuildInfo()
 	fmt.Printf("NGINX Ingress Controller Version=%v Commit=%v Date=%v DirtyState=%v Arch=%v/%v Go=%v\n", version, commitHash, commitTime, dirtyBuild, runtime.GOOS, runtime.GOARCH, runtime.Version())
 
