@@ -240,7 +240,7 @@ func NewLoadBalancerController(input NewLoadBalancerControllerInput) *LoadBalanc
 		isIPV6Disabled:               input.IsIPV6Disabled,
 	}
 
-	eventBroadcaster := record.NewBroadcaster()
+	eventBroadcaster := record.NewBroadcaster(record.WithCorrelatorOptions(record.CorrelatorOptions{LRUCacheSize: 1}))
 	eventBroadcaster.StartLogging(glog.Infof)
 	eventBroadcaster.StartRecordingToSink(&core_v1.EventSinkImpl{
 		Interface: core_v1.New(input.KubeClient.CoreV1().RESTClient()).Events(""),
